@@ -1,0 +1,125 @@
+<!-- Javascript HQX
+
+Copyright (C) 2015 Eliastik (eliastiksofts.com)
+
+Ce fichier fait partie de Javascript HQX.
+
+Javascript HQX est un logiciel libre ; vous pouvez le redistribuer ou le
+modifier suivant les termes de la GNU General Public License telle que
+publiée par la Free Software Foundation ; soit la version 3 de la licence,
+soit (à votre gré) toute version ultérieure.
+
+Javascript HQX est distribué dans l'espoir qu'il sera utile, mais SANS
+AUCUNE GARANTIE ; sans même la garantie tacite de QUALITÉ MARCHANDE ou
+d'ADÉQUATION à UN BUT PARTICULIER. Consultez la GNU General Public License
+pour plus de détails.
+
+Vous devez avoir reçu une copie de la GNU General Public License en même
+temps que Javascript HQX ; si ce n'est pas le cas,
+consultez <http://www.gnu.org/licenses>. -->
+<!DOCTYPE html>
+<html lang="fr">
+   <head>
+      <title>JavaScript hqx</title>
+      <script type="text/javascript" src="hqx.js"></script>
+      <script type="text/javascript" src="jquery.min.js"></script>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width">
+      <link rel="icon" type="image/ico" href="favicon.ico" />
+      <!--[if IE]>
+      <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+      <![endif]-->
+      <link rel="stylesheet" href="style.css" type="text/css" />
+      <link rel="stylesheet" href="magnific-popup/magnific-popup.css">
+      <script src="magnific-popup/magnific-popup.js"></script>
+   </head>
+   <body>
+      <div id="overlayLoading" style="display:none;"></div>
+      <header id="header">
+         <div id="iconeApp" class="icon" onclick="window.location.href='index.html'" title="Accueil"></div>
+         <span id="titreApp">Javascript hqx</span>
+      </header>
+      <div id="contenu">
+         <div id="checkStyle" style="color: red;">Le fichier de style « style.css » est manquant. Il est important pour le fonctionnement de Javascript hqx. Assurez-vous qu'il soit présent dans le même dossier que le fichier « index.html » et réessayez. Dans le cas échant, re-téléchargez cette application.</div>
+         <div id="noscript"><span class="icon icon-warning"></span> Javascript est désactivé ! Ce programme fonctionnant grâce à Javascript, vous ne pourrez pas l'utiliser. <a href="http://enable-javascript.com/fr/">Cliquez ici pour savoir comment activer javascript</a>.</div>
+         <div id="canvasError" style="display: none;"><span class="icon icon-warning"></span> Javascript hqx est incompatible avec votre navigateur car celui-ci ne supporte pas l'API Canvas. Mettez-le à jour, puis réessayez.</div>
+         <p id="presentation">Ce programme vous permet d'<strong>upscaler des images</strong>, c'est-à-dire de les <strong>agrandir en augmentant la qualité</strong> (de préférence des sprites de jeux vidéos) directement sur votre navigateur web.
+            <strong>Choississez l'image sur l'ordinateur</strong> OU <strong>entrez le chemin absolu de l'image</strong> ET <strong>choisissez ensuite l'algorithme d'agrandissement</strong> (plus le chiffre après hq est grand, plus la qualité sera meilleure mais le traitement plus long). Vous pouvez aussi <strong>utiliser une adresse URL vers une image sur un site web</strong>, mais il se peut que le site en interdise l'accès aux scripts.
+         </p>
+         <p id="credits">Programme basé sur <a href="https://github.com/phoboslab/js-hqx" target="_blank">js-hqx</a>. <a href="LICENCE.txt" target="_blank">Licence ici</a>. Lisez le <a href="README.txt" target="_blank">README.txt</a> pour plus d'informations sur la compatibilité et autres. Programme créé par Eliastik. Découvrez <a href="http://eliastiksofts.com/data-uri-encoder" target="_blank">Data URI Encoder</a>, un autre de mes programmes permettant de convertir des images et des textes sous la forme d'une URI encodée en Base64 directement sur votre navigateur web préféré.</p>
+         <div class="infos" id="infosDebug" style="margin-top: 4px; margin-bottom: 8px; display: none;"><span class="icon icon-infos"></span> Mode débogage activé.</div>
+         <div class="infos" id="infosPng" style="margin-top: 4px; margin-bottom: 8px;"><span class="icon icon-infos"></span> L'image est sauvegardable sous le type PNG, en cliquant droit dessus et en cliquant ensuite sur « Enregistrer l'image sous… »&nbsp;&nbsp;<span class="icon icon-close" id="close" style="color: black; cursor: pointer; font-size: 10pt;" title="Fermer"></span></div>
+         <div class="infos" id="infosMagic" style="margin-top: 4px; margin-bottom: 8px; display: none;"><span class="icon icon-infos"></span> Bravo, vous avez trouvé un easter egg !!&nbsp;&nbsp;<span class="icon icon-close" id="closeMagic" style="color: black; cursor: pointer; font-size: 10pt;" title="Fermer"></span></div>
+         <div id="javascriptErrors">
+            <h3>Erreurs Javascript :</h3>
+            <ul id="javascriptErrorsList" style="color:red;"></ul>
+            <button href="#" id="fermerJsError" onclick="fermerJsError();"><span class="icon icon-close"></span> Fermer</button>
+         </div>
+         <div id="onglets">
+            <span class="onglet_0 onglet" id="onglet_dialogForm" onclick="javascript:change_onglet('dialogForm');"><span class="icon icon-ordinateur"></span> Image sur l'ordinateur</span>
+            <span class="onglet_0 onglet" id="onglet_form" onclick="javascript:change_onglet('form');"><span class="icon icon-web"></span> Image sur Internet ou autre (chemin absolu)</span>
+            <span class="onglet_0 onglet" id="onglet_updateForm" onclick="javascript:change_onglet('updateForm');"><span class="icon icon-update"></span> Mise à jour</span>
+         </div>
+         <div class="box contenu_onglet" id="contenu_onglet_dialogForm">
+            <div class="erreur" id="erreurFileApi" style="display: none; margin-top: 4px; margin-bottom: 4px;"><span class="icon icon-warning"></span> Votre navigateur est incompatible avec cette méthode de choix de fichier car l'API File n'est pas supportée. Mettez-le à jour ou utilisez la seconde méthode.</div>
+            <label for="cheminFile"><span class="icon icon-image"></span> Choix de l'image :</label>
+            <input type="file" id="cheminFile" accept="image/*" style="width: 250px;" /><br />
+            <label for="algorithme1"><span class="icon icon-algo"></span> Algorithme :</label>
+            <select id="algorithme1" style="width: 254px;">
+               <option value="2">hq2x</option>
+               <option value="3">hq3x</option>
+               <option value="4">hq4x</option>
+               <option value="5">Pixel Perfect (Nearest-neighbor)</option>
+            </select>
+            <br />
+            <div id="scale" style="display: none;"><label for="coeffPPV"><span class="icon icon-ppv"></span> Coefficient d'agrandissement :</label> <input type="number" value="2" id="coeffPPV" min="1" /> fois.</div>
+            <button id="btnValider1" style="margin-top: 4px;"><span class="icon icon-valider"></span> Valider</button>
+            <div class="erreur" id="erreurFormOne" style="display: none; margin-top: 4px;"></div>
+            <div id="tmpTraitementOne" style="margin-top: 4px;"></div>
+         </div>
+         <div class="box contenu_onglet" id="contenu_onglet_form" style="display: none;">
+            <label for="chemin"><span class="icon icon-image"></span> Chemin absolu de l'image :</label>
+            <input type="text" id="chemin" style="width: 244px;" /><br />
+            <label for="algorithme"><span class="icon icon-algo"></span> Algorithme :</label>
+            <select id="algorithme" style="width: 254px;">
+               <option value="2">hq2x</option>
+               <option value="3">hq3x</option>
+               <option value="4">hq4x</option>
+               <option value="5">Pixel Perfect (Nearest-neighbor)</option>
+            </select>
+            <br />
+            <div id="scale2" style="display: none;"><label for="coeffPPV2"><span class="icon icon-ppv"></span> Coefficient d'agrandissement :</label> <input type="number" value="2" id="coeffPPV2" min="1" /> fois.</div>
+            <button id="btnValider" style="margin-top: 4px;"><span class="icon icon-valider"></span> Valider</button><br />
+            <div class="erreur" id="erreurForm" style="display: none; margin-top: 4px;"></div>
+            <div id="tmpTraitement" style="margin-top: 4px;"></div>
+         </div>
+         <div class="box contenu_onglet" id="contenu_onglet_updateForm" style="display: none;">
+            <p>Ici, vous pouvez voir quelle est la version actuelle et rechercher si une mise à jour de l'application existe :</p>
+            <div class="success" id="infoUpdateSuccess" style="display: none; margin-bottom: 15px;"></div>
+            <div class="infos" id="infoUpdateDispo" style="display: none; margin-bottom: 15px;"></div>
+            <label>Version actuelle :</label>
+            <span id="versionActuelle"><i>Inconnue</i></span><br />
+            <label>Nouvelle version :</label>
+            <span id="nouvelleVerison">-</span><br />
+            <label>Changements de cette version :</label>
+            <span id="changementsVersion">-</span><br />
+            <label>Lien(s) de téléchargement :</label>
+            <span id="lienNouvelleVersion">-</span><br />
+            <label>URL de la source de la mise à jour :</label>
+            <span id="sourceMiseAJour">-</span><br />
+            <button id="btnUpdate" style="margin-top: 4px;"><span class="icon icon-recherche"></span> Rechercher une mise à jour de l'application</button><br />
+            <div class="erreur" id="erreurUpdate" style="display: none; margin-top: 4px;"></div>
+            <div id="tmpTraitementUpdate" style="margin-top: 4px;"></div>
+         </div>
+         <div id="gauche">
+            <h2>Original <span style="float: right; color: grey;"><a id="resetImg" href="#" style="color: grey;">Réinitialiser</a> <span class="icon icon-arrow-result"></span></span></h2>
+            <div id="original">Veuillez sélectionner une image…</div>
+         </div>
+         <div id="droite">
+            <h2>Résultat</h2>
+            <div id="resultat">Veuillez sélectionner une image…</div>
+         </div>
+      </div>
+      <script type="text/javascript" src="scripts.js"></script>
+   </body>
+</html>
