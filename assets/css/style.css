@@ -21,47 +21,47 @@ consultez <http://www.gnu.org/licenses>. */
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 400;
-    src: url('fonts/OpenSans-Regular.ttf') format('truetype');
+    src: url('../fonts/OpenSans-Regular.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: italic;
     font-weight: 400;
-    src: url('fonts/OpenSans-Italic.ttf') format('truetype');
+    src: url('../fonts/OpenSans-Italic.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 300;
-    src: url('fonts/OpenSans-Light.ttf') format('truetype');
+    src: url('../fonts/OpenSans-Light.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 700;
-    src: url('fonts/OpenSans-Bold.ttf') format('truetype');
+    src: url('../fonts/OpenSans-Bold.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: italic;
     font-weight: 700;
-    src: url('fonts/OpenSans-BoldItalic.ttf') format('truetype');
+    src: url('../fonts/OpenSans-BoldItalic.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: normal;
     font-weight: 800;
-    src: url('fonts/OpenSans-ExtraBold.ttf') format('truetype');
+    src: url('../fonts/OpenSans-ExtraBold.ttf') format('truetype');
 }
 @font-face {
     font-family: 'Open Sans';
     font-style: italic;
     font-weight: 800;
-    src: url('fonts/OpenSans-ExtraBoldItalic.ttf') format('truetype');
+    src: url('../fonts/OpenSans-ExtraBoldItalic.ttf') format('truetype');
 }
 @font-face {
     font-family: 'IcoMoon-Free';
-    src: url('fonts/IcoMoon-Free.ttf') format('truetype');
+    src: url('../fonts/IcoMoon-Free.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -71,7 +71,7 @@ div#contenu {
 }
 body {
     font-family: "Open Sans", Arial, Sans-Serif;
-    background-image: url(images/fond.png);
+    background-image: url(../img/fond.png);
     margin: 0;
 }
 #header,
@@ -115,7 +115,7 @@ body {
     text-align: center;
     vertical-align: middle;
     line-height: 64px;
-    background-image: url(favicon.ico);
+    background-image: url(../../favicon.ico);
     background-size: 54px;
     background-repeat: no-repeat;
 }
