@@ -25,9 +25,9 @@ Vous devez avoir reçu une copie de la GNU General Public License en même
 temps que Javascript HQX ; si ce n'est pas le cas,
 consultez <http://www.gnu.org/licenses>. */
 // Configuration de l'application :
-versionApplication = "1.1.4"; // Version de l'application
-debugMode = false; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
-urlToUpdater = "http://www.eliastiksofts.com/javascript-hqx/update.php?jsoncallback=?"; // URL vers le module permettant de vérifier les mises à jour de l'application
+var versionApplication = "1.1.4"; // Version de l'application
+var debugMode = true; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
+var urlToUpdater = "http://www.eliastiksofts.com/javascript-hqx/update.php?jsoncallback=?"; // URL vers le module permettant de vérifier les mises à jour de l'application
 // Fin configuration de l'application
 nbErrorJavascript = 0; // Nb d'erreurs Javascript (ne pas changer cette valeur)
 $("#noscript").hide();
@@ -270,8 +270,8 @@ var kona = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
 $(document).keydown(function(e) {
     if (e.keyCode === kona[nbk++]) {
         if (nbk === kona.length) {
-            $("#iconeApp").css("background-image", "url(images/pacman.gif)");
-            $("#iconeApp").attr("title", "Pac-man ! (retour à l'accueil)");
+            $("#iconeApp").css("background-image", "url(assets/img/pacman.gif)");
+            $("#iconeApp").attr("title", "Pac-man ! (accueil)");
             $("#infosMagic").show();
             nbk = 0;
             return true;
@@ -320,7 +320,7 @@ function addslashes(string) {
     replace(/"/g, '\\"');
 }
 // credits : http://phoboslab.org/log/2012/09/drawing-pixels-is-hard
-var resize = function(img, scale) {
+function resize(img, scale) {
     // Takes an image and a scaling factor and returns the scaled image
 
     // The original image is drawn into an offscreen canvas of the same size
@@ -362,17 +362,28 @@ function jsoncallbackUpdate(data) {
     $("#infoUpdateSuccess").hide();
     $("#infoUpdateDispo").hide();
     if(data.version != versionApplication) {
-        $("#infoUpdateDispo").html('<span class="icon icon-infos"></span> Une nouvelle version de l\'application est disponible !');
+        $("#infoUpdateDispo").html('<span class="icon icon-infos"></span> ' + i18next.t("update.newVersionAvailable"));
         $("#infoUpdateDispo").show();
     } else {
-        $("#infoUpdateSuccess").html('<span class="icon icon-valider"></span> Aucune mise à jour disponible. Vous disposez de la dernière version en date.');
+        $("#infoUpdateSuccess").html('<span class="icon icon-valider"></span> ' + i18next.t("update.noNewVersion"));
         $("#infoUpdateSuccess").show();
     }
     $("#nouvelleVerison").text(data.version);
-    $("#changementsVersion").html(data.changements);
-    $("#lienNouvelleVersion").html(data.liensTelechargement);
+    $("#changementsVersion").text(data.changements);
+    var linksList = "";
+    $.each(data.liensTelechargementNew, function(index, value) {
+        var valueFormatted = '<a href="' + value + '" target="_blank">' + value + '</a>';
+        if(linksList == "") {
+            linksList = valueFormatted + ", ";
+        } else if(typeof(data.liensTelechargementNew[index + 1]) !== "undefined") {
+            linksList = linksList + valueFormatted + ", ";
+        } else {
+            linksList = linksList + valueFormatted;
+        }
+    });
+    $("#lienNouvelleVersion").html(linksList);
     elapsedTimeSearchUpdate = new Date().getTime() - startTimeSearchUpdate;
-    $("#tmpTraitementUpdate").html("<span class=\"icon icon-duree\"></span> Durée de recherche de la mise à jour : " + elapsedTimeSearchUpdate / 1000 + " seconde(s).");
+    $("#tmpTraitementUpdate").html("<span class=\"icon icon-duree\"></span>  " + i18next.t("update.searchDuration") + " " + elapsedTimeSearchUpdate / 1000 + " " + i18next.t("update.seconds") + ".");
     clearTimeout(timeOutErrorUpdate);
     $("#btnUpdate").removeAttr("disabled");
 }
@@ -387,13 +398,16 @@ function checkUpdate() {
     $.getJSON(urlToUpdater);
 }
 function errorUpdate() {
-    $("#erreurUpdate").html("<span class=\"icon icon-erreur\"></span> Une erreur lors de la recherche d'une mise à jour semble être survenue. Vérifiez votre connexion internet, puis réessayez. Si le problème persiste, vérifiez également la disponibilité de la source de la mise à jour.");
+    $("#erreurUpdate").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("update.error"));
     $("#erreurUpdate").show();
     $("#btnUpdate").removeAttr("disabled");
     clearTimeout(timeOutErrorUpdate);
 }
 $("#btnUpdate").click(function() {
     checkUpdate();
+});
+$("#btnValiderLang").click(function() {
+    changeLng($("#languageSelect").val());
 });
 $("#algorithme1").change(function() {
     if ($('#algorithme1 option:selected').val() == "5") {
@@ -430,7 +444,7 @@ window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
         var elError = document.createElement("li");
         var texteFormatted = addslashes(errorAlertText);
         elError.id = 'errorJavascriptNum' + nbErrorJavascript;
-        elError.innerHTML = '<span class="icon icon-erreur"></span> Erreur Javascript détectée (n° de l\'erreur : ' + nbErrorJavascript + '). Pour plus d\'informations sur l\'erreur, <a href="#" onclick="openPopup(\'' + texteFormatted + '\');">cliquez ici</a> ou jetez un coup d\'oeil à la console Javascript. &nbsp;&nbsp;<span class="icon icon-close" style="color: black; cursor: pointer; font-size: 10pt;" title="Fermer" onclick="$(\'#errorJavascriptNum' + nbErrorJavascript + '\').fadeOut(250,function(){$(\'#errorJavascriptNum' + nbErrorJavascript + '\').html(\'\')});"></span>';
+        elError.innerHTML = '<span class="icon icon-erreur"></span> Erreur Javascript détectée (n° de l\'erreur : ' + nbErrorJavascript + '). Pour plus d\'informations sur l\'erreur, <a href="#" onclick="openPopup(\'' + texteFormatted + '\');">cliquez ici</a> ou jetez un coup d\'œil à la console Javascript. &nbsp;&nbsp;<span class="icon icon-close" style="color: black; cursor: pointer; font-size: 10pt;" title="Fermer" onclick="$(\'#errorJavascriptNum' + nbErrorJavascript + '\').fadeOut(250,function(){$(\'#errorJavascriptNum' + nbErrorJavascript + '\').html(\'\')});"></span>';
         document.getElementById("javascriptErrorsList").appendChild(elError);
         $("#javascriptErrors").fadeIn(250);
     }
