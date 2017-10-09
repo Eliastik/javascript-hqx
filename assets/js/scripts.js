@@ -25,7 +25,7 @@ Vous devez avoir reçu une copie de la GNU General Public License en même
 temps que Javascript HQX ; si ce n'est pas le cas,
 consultez <http://www.gnu.org/licenses>. */
 // Configuration de l'application :
-var versionApplication = "1.1.4"; // Version de l'application
+var versionApplication = "1.2"; // Version de l'application
 var debugMode = true; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
 var urlToUpdater = "http://www.eliastiksofts.com/javascript-hqx/update.php?jsoncallback=?"; // URL vers le module permettant de vérifier les mises à jour de l'application
 // Fin configuration de l'application
@@ -55,6 +55,10 @@ if (Object.defineProperty &&
         });
     })();
 }
+// function pour comparer deux chaînes de version - https://stackoverflow.com/questions/1179366/is-there-a-javascript-strcmp
+String.prototype.strcmp = function(str) {
+    return ( ( this == str ) ? 0 : ( ( this > str ) ? 1 : -1 ) );
+};
 // Affichage mode debug
 if(debugMode == true) {
     $("#infosDebug").show();
@@ -167,7 +171,7 @@ if (window.HTMLCanvasElement == null) {
                         $("#erreurFormOne").hide();
                         $("#erreurFormOne").html("");
                         $("#original").html('<img src="' + cheminImg2 + '" alt="Image" id="imgOriginal" onload="loaded(this, 1)" onclick="linkToImg(this.src);" title="'+ i18next.t("processing.newTab") +'"></img>');
-                        $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span>' + i18next.t("processing.error") + '</div>');
+                        $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span> ' + i18next.t("processing.error") + '</div>');
                         startTime = new Date().getTime();
                         elapsedTime = 0;
                     }
@@ -222,7 +226,7 @@ if (window.HTMLCanvasElement == null) {
                 $("#erreurForm").hide();
                 $("#erreurForm").html("");
                 $("#original").html('<img src="' + cheminImg + '" alt="Image" id="imgOriginal" onload="loaded(this, 2)" onclick="linkToImg(this.src);" title="'+ i18next.t("processing.newTab") +'"></img>');
-                $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span>' + i18next.t("processing.error") + '</div>');
+                $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span> ' + i18next.t("processing.error") + '</div>');
                 startTime = new Date().getTime();
                 elapsedTime = 0;
             }
@@ -362,7 +366,8 @@ function jsoncallbackUpdate(data) {
     $("#erreurUpdate").hide();
     $("#infoUpdateSuccess").hide();
     $("#infoUpdateDispo").hide();
-    if(data.version != versionApplication) {
+    var newVersionTest = versionApplication.strcmp(data.version);
+    if(newVersionTest < 0) {
         $("#infoUpdateDispo").html('<span class="icon icon-infos"></span> ' + i18next.t("update.newVersionAvailable"));
         $("#infoUpdateDispo").show();
     } else {

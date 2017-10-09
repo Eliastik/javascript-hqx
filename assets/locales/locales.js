@@ -57,7 +57,7 @@ i18next.use(window.i18nextBrowserLanguageDetector).init({
                 "magicTitle": "Pac-Man! (home)",
                 "appNotCompatible": "Javascript hqx isn't compatible with your web browser because it not support the Canvas API. Update it, then try again.",
                 "descr1": "This program allow you to ",
-                "descr2": "upscale image",
+                "descr2": "upscale images",
                 "descr3": ", that is to say to",
                 "descr4": "enlarge them by increasing the quality",
                 "descr5": "(preferably video game sprites) directly on your web browser.",
