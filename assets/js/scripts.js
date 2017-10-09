@@ -1,29 +1,27 @@
-/* Script Javascript HQX
-
-Copyright (C) 2015 Eliastik (eliastiksofts.com)
-
-Ce fichier fait partie de Javascript HQX.
-
-Le code JavaScript de ce fichier est un logiciel libre : vous
-pouvez le redistribuer et/ou le modifier selon les termes de la
-licence GNU General Public License (GNU GPL) telle que
-publiée par la Free  Software Foundation, en version 3 de
-la licence, ou (à votre discrétion) toute version ultérieure. Le code
-est distribué SANS AUCUNE GARANTIE ; sans même la garantie
-tacite de QUALITÉ MARCHANDE ou d'ADÉQUATION À UN BUT PARTICULIER.
-Consulter la GNU GPL pour plus de détails.
-
-En tant que permission supplémentaire selon les termes de la GNU
-GPL version 3 section 7, vous pouvez distribuer des formes
-« non source » (par ex., minimisées ou compactées) de ce code
-sans la copie de la GNU GPL normalement requise section 4, à
-condition d'inclure cet avis de licence et une URL par
-laquelle les destinataires peuvent accéder au code source
-correspondant.
-
-Vous devez avoir reçu une copie de la GNU General Public License en même
-temps que Javascript HQX ; si ce n'est pas le cas,
-consultez <http://www.gnu.org/licenses>. */
+/* Javascript HQX
+ * 
+ * Copyright (C) 2015-2017 Eliastik (eliastiksofts.com)
+ * 
+ * This file is part of Javascript hqx.
+ * 
+ * Javascript hqx is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Javascript hqx is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * As additional permission under GNU GPL version 3 section 7, you
+ * may distribute non-source (e.g., minimized or compacted) forms of
+ * that code without the copy of the GNU GPL normally required by
+ * section 4, provided you include this license notice and a URL
+ * through which recipients can access the Corresponding Source.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Javascript hqx.  If not, see <http://www.gnu.org/licenses/>. */
 // Configuration de l'application :
 var versionApplication = "1.2"; // Version de l'application
 var debugMode = true; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
@@ -378,7 +376,7 @@ function jsoncallbackUpdate(data) {
     $("#changementsVersion").text(data.changements);
     var linksList = "";
     $.each(data.liensTelechargementNew, function(index, value) {
-        var valueFormatted = '<a href="' + value + '" target="_blank">' + value + '</a>';
+        var valueFormatted = '<a href="' + addslashes(value) + '" target="_blank">' + addslashes(value) + '</a>';
         if(linksList == "") {
             linksList = valueFormatted + ", ";
         } else if(typeof(data.liensTelechargementNew[index + 1]) !== "undefined") {
