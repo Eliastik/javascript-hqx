@@ -1,6 +1,6 @@
 <!-- Javascript HQX README file -->
-<img src="https://raw.githubusercontent.com/Eliastik/hacklol-modifier/master/favicon.ico" width="306" alt="Javascript hqx" />
-<img src="https://raw.githubusercontent.com/Eliastik/hacklol-modifier/master/screenshot.png" width="640" alt="Screenshot" />
+<img src="https://raw.githubusercontent.com/Eliastik/javascript-hqx/master/favicon.ico" width="306" alt="Javascript hqx" />
+<img src="https://raw.githubusercontent.com/Eliastik/javascript-hqx/master/screenshot.png" width="640" alt="Screenshot" />
 
 ## A propos du programme/About the program
 
