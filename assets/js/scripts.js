@@ -24,7 +24,7 @@
  * along with Javascript hqx.  If not, see <http://www.gnu.org/licenses/>. */
 // Configuration de l'application :
 var versionApplication = "1.2"; // Version de l'application
-var debugMode = true; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
+var debugMode = false; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
 var urlToUpdater = "http://www.eliastiksofts.com/javascript-hqx/update.php?jsoncallback=?"; // URL vers le module permettant de vérifier les mises à jour de l'application
 // Fin configuration de l'application
 var nbErrorJavascript = 0; // Nb d'erreurs Javascript (ne pas changer cette valeur)
