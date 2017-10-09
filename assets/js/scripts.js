@@ -29,7 +29,7 @@ var versionApplication = "1.1.4"; // Version de l'application
 var debugMode = true; // Mettre à true pour activer le mode debug (affichage des erreurs), false pour le désactiver
 var urlToUpdater = "http://www.eliastiksofts.com/javascript-hqx/update.php?jsoncallback=?"; // URL vers le module permettant de vérifier les mises à jour de l'application
 // Fin configuration de l'application
-nbErrorJavascript = 0; // Nb d'erreurs Javascript (ne pas changer cette valeur)
+var nbErrorJavascript = 0; // Nb d'erreurs Javascript (ne pas changer cette valeur)
 $("#noscript").hide();
 $("#versionActuelle").text(versionApplication);
 // émuler trim sur les anciens navigateurs
@@ -92,9 +92,9 @@ if (window.HTMLCanvasElement == null) {
         var scaledImageHtml = "";
         elapsedTime = new Date().getTime() - startTime;
         if (type == 1) {
-            $("#tmpTraitementOne").html("<span class=\"icon icon-duree\"></span> Durée du traitement : " + elapsedTime / 1000 + " seconde(s).");
+            $("#tmpTraitementOne").html("<span class=\"icon icon-duree\"></span> " + i18next.t("processing.processingTime") + " " + elapsedTime / 1000 + " " + i18next.t("seconds"));
         } else {
-            $("#tmpTraitement").html("<span class=\"icon icon-duree\"></span> Durée du traitement : " + elapsedTime / 1000 + " seconde(s).");
+            $("#tmpTraitement").html("<span class=\"icon icon-duree\"></span> " + i18next.t("processing.processingTime") + " " + elapsedTime / 1000 + " " + i18next.t("seconds"));
         }
         elapsedTime = 0;
     };
@@ -137,13 +137,13 @@ if (window.HTMLCanvasElement == null) {
             if ($('#algorithme1 option:selected').val() == "5") {
                 if (parseInt($("#coeffPPV").val()) > 0) {
                     coeff = parseInt($("#coeffPPV").val());
-                    if (coeff >= 6 && !confirm("Le coefficient d'agrandissement est trop élevé et risque de ralentir votre navigateur web. Continuer ?")) {
+                    if (coeff >= 6 && !confirm(i18next.t("processing.tooHigh"))) {
                         $("#btnValider1").removeAttr("disabled");
                         return false;
                     }
                 } else {
                     $("#erreurFormOne").show();
-                    $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> Le coefficient d'agrandissement est incorrect car il est soit inférieur à 0, soit il s'agit d'un nombre à virgule, soit il contient des lettres ou soit il est vide. Veuillez réessayer.");
+                    $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.coeffInvalid"));
                     $("#btnValider1").removeAttr("disabled");
                     return false;
                 }
@@ -157,23 +157,24 @@ if (window.HTMLCanvasElement == null) {
                     var cheminImg2 = reader.result; // on lit le fichier
                     if (cheminImg2.trim() == "") { // non utilisé
                         $("#erreurFormOne").show();
-                        $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> Vous n'avez entré aucun chemin d'image. Veuillez réessayer.");
+                        $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.emptyPath"));
                         return false;
                     } else if (algo > 5 || algo < 2) { // on vérifie l'algorithme
                         $("#erreurFormOne").show();
-                        $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> Erreur lors du choix de l'algorithme. Veuillez réessayer.");
+                        $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.errorAlgo"));
                         return false;
                     } else { // si tout va bien
                         $("#erreurFormOne").hide();
                         $("#erreurFormOne").html("");
-                        $("#original").html('<img src="' + cheminImg2 + '" alt="Image" id="imgOriginal" onload="loaded(this, 1)" onclick="linkToImg(this.src);" title="Ouvrir l\'image dans un nouvel onglet"></img>');
-                        $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span> Il semble qu\'une erreur soit survenue lors de l\'agrandissement de l\'image. Peut-être que votre navigateur n\'est pas compatible ou qu\'il ait désactivé le chargement de l\'image par mesure de sécurité. Veuillez réessayer sur un autre navigateur.<br /><br />Il est également possible que l\'image soit introuvable (si elle n\'est pas affichée dans « Original »). Dans ce cas, assurez-vous que le chemin de l\'image soit correct.</div>');
+                        $("#original").html('<img src="' + cheminImg2 + '" alt="Image" id="imgOriginal" onload="loaded(this, 1)" onclick="linkToImg(this.src);" title="'+ i18next.t("processing.newTab") +'"></img>');
+                        $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span>' + i18next.t("processing.error") + '</div>');
                         startTime = new Date().getTime();
                         elapsedTime = 0;
                     }
                 } else {
                     $("#erreurFormOne").show();
-                    $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> Format de fichier incorrect. Les formats de fichiers supportés sont les suivants : jpe, jpg, jpeg, jif, jfif, jfi, png, gif, ico, mpo, tif, tiff, bmp, dib, svg, svgz, raw, pict, pct.");
+                    var allowedTypeFormatted = allowedTypes.join(", ");
+                    $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.unknownFormat") + " " + allowedTypeFormatted + ".");
                     return false;
                 }
             }, false);
@@ -182,7 +183,7 @@ if (window.HTMLCanvasElement == null) {
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 $("#erreurFormOne").show();
-                $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> Vous n'avez sélectionné aucune image. Veuillez réessayer.");
+                $("#erreurFormOne").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.noImgSelected"));
                 return false;
             }
             return true;
@@ -193,13 +194,13 @@ if (window.HTMLCanvasElement == null) {
         if ($('#algorithme option:selected').val() == "5") {
             if (parseInt($("#coeffPPV2").val()) > 0) {
                 coeff = parseInt($("#coeffPPV2").val());
-                if (coeff >= 6 && !confirm("Le coefficient d'agrandissement est trop élevé et risque de ralentir votre navigateur web. Continuer ?")) {
+                if (coeff >= 6 && !confirm(i18next.t("processing.tooHigh"))) {
                     $("#btnValider").removeAttr("disabled");
                     return false;
                 }
             } else {
                 $("#erreurForm").show();
-                $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> Le coefficient d'agrandissement est incorrect car il est soit inférieur à 0, soit il s'agit d'un nombre à virgule, soit il contient des lettres ou soit il est vide. Veuillez réessayer.");
+                $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.coeffInvalid"));
                 $("#btnValider").removeAttr("disabled");
                 return false;
             }
@@ -210,37 +211,32 @@ if (window.HTMLCanvasElement == null) {
         $("#tmpTraitement").text(""); // on vide le texte du temps de traitement
         if (cheminImg.trim() == "") { // si rien n'est entré
             $("#erreurForm").show();
-            $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> Vous n'avez entré aucun chemin d'image. Veuillez réessayer.");
+            $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.emptyPath"));
             return false;
         } else if (allowedTypes2.indexOf(imgType2) != -1) { // si l'extension est autorisée
             if (algo > 5 || algo < 2) { // on vérifie la validité de l'algorithme
                 $("#erreurForm").show();
-                $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> Erreur lors du choix de l'algorithme. Veuillez réessayer.");
+                $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.errorAlgo"));
                 return false;
             } else { // si tout va bien
                 $("#erreurForm").hide();
                 $("#erreurForm").html("");
-                $("#original").html('<img src="' + cheminImg + '" alt="Image" id="imgOriginal" onload="loaded(this, 2)" onclick="linkToImg(this.src);" title="Ouvrir l\'image dans un nouvel onglet"></img>');
-                $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span> Il semble qu\'une erreur soit survenue lors de l\'agrandissement de l\'image. Peut-être que votre navigateur n\'est pas compatible ou qu\'il ait désactivé le chargement de l\'image par mesure de sécurité. Veuillez réessayer sur un autre navigateur.<br /><br />Il est également possible que l\'image soit introuvable (si elle n\'est pas affichée dans « Original »). Dans ce cas, assurez-vous que le chemin de l\'image soit correct.</div>');
+                $("#original").html('<img src="' + cheminImg + '" alt="Image" id="imgOriginal" onload="loaded(this, 2)" onclick="linkToImg(this.src);" title="'+ i18next.t("processing.newTab") +'"></img>');
+                $("#resultat").html('<div class="erreur" style="display: inline-block;"><span class="icon icon-erreur"></span>' + i18next.t("processing.error") + '</div>');
                 startTime = new Date().getTime();
                 elapsedTime = 0;
             }
         } else {
             $("#erreurForm").show();
-            $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> Format de fichier incorrect. Les formats de fichiers supportés sont les suivants : jpe, jpg, jpeg, jif, jfif, jfi, png, gif, ico, mpo, tif, tiff, bmp, dib, svg, svgz, raw, pict, pct.");
+            var allowedTypeFormatted = allowedTypes.join(", ");
+            $("#erreurForm").html("<span class=\"icon icon-erreur\"></span> " + i18next.t("processing.unknownFormat") + " " + allowedTypeFormatted + ".");
             return false;
         }
         return true;
     }
 
-    function reset() {
-        $("#original").text("Veuillez sélectionner une image…");
-        $("#resultat").text("Veuillez sélectionner une image…");
-        $.magnificPopup.close();
-    }
-
     $("#resetImg").click(function() {
-        openPopup("<h2>Confirmation</h2><span class=\"icon icon-question\"></span> Êtes-vous sûr de vouloir réinitialiser Javascript hqx et d'effacer l'image originale et le résultat ?<div style=\"margin-top: 15px;\"><button onclick=\"reset();\"><span class=\"icon icon-valider\"></span> Oui</button> <button class=\"closeMagnificPopup\"><span class=\"icon icon-close\"></span> Non</button></div>");
+        openPopup("<h2>" + i18next.t("confirmReset.title") + "</h2><span class=\"icon icon-question\"></span> " + i18next.t("confirmReset.descr") + "<div style=\"margin-top: 15px;\"><button onclick=\"reset();\"><span class=\"icon icon-valider\"></span> " + i18next.t("yes") + "</button> <button class=\"closeMagnificPopup\"><span class=\"icon icon-close\"></span> " + i18next.t("no") + "</button></div>");
     });
 }
 /* autre */
@@ -252,9 +248,14 @@ $("#closeMagic").click(function() {
     $("#infosMagic").fadeOut(250);
 });
 
+function reset() {
+    $("#original").text(i18next.t("selectImage"));
+    $("#resultat").text(i18next.t("selectImage"));
+    $.magnificPopup.close();
+}
+
 function linkToImg(url) {
-    window.open(url);
-    return true;
+    return window.open(url);
 }
 // lors du scroll, l'header devient transparent
 $(window).scroll(function() {
@@ -271,7 +272,7 @@ $(document).keydown(function(e) {
     if (e.keyCode === kona[nbk++]) {
         if (nbk === kona.length) {
             $("#iconeApp").css("background-image", "url(assets/img/pacman.gif)");
-            $("#iconeApp").attr("title", "Pac-man ! (accueil)");
+            $("#iconeApp").attr("title", i18next.t("magicTitle"));
             $("#infosMagic").show();
             nbk = 0;
             return true;
@@ -435,16 +436,18 @@ window.onload = function() {
     } else {
         $("#scale2").hide();
     }
+
+    reset();
 }
 window.onerror = function(errorMsg, url, lineNumber, column, errorObj) {
-    if(debugMode == true) {
+    if(debugMode) {
         $("#infosDebug").show();
         nbErrorJavascript++;
-        var errorAlertText = '<h2>Informations de débogage sur l\'erreur Javascript n°' + nbErrorJavascript + '</h2><ul><li><strong>Code de l\'erreur :</strong> ' + errorMsg + '</li><li><strong>Script :</strong> ' + url + '</li><li><strong>Ligne :</strong> ' + lineNumber + '</li><li><strong>Colonne :</strong> ' + column + '</li><li><strong>StackTrace :</strong> ' + errorObj + '</li></ul><button class=\'closeMagnificPopup\'><span class=\'icon icon-close\'></span> Fermer la fenêtre</button>';
+        var errorAlertText = '<h2>' + i18next.t("debugMode.infosTitle") + nbErrorJavascript + '</h2><ul><li><strong>' + i18next.t("debugMode.errorCode") + '</strong> ' + errorMsg + '</li><li><strong>' + i18next.t("debugMode.script") + '</strong> ' + url + '</li><li><strong>' + i18next.t("debugMode.line") + '</strong> ' + lineNumber + '</li><li><strong>' + i18next.t("debugMode.column") + '</strong> ' + column + '</li><li><strong>' + i18next.t("debugMode.stacktrace") + '</strong> ' + errorObj + '</li></ul><button class=\'closeMagnificPopup\'><span class=\'icon icon-close\'></span> ' + i18next.t("closeWindow") + '</button>';
         var elError = document.createElement("li");
         var texteFormatted = addslashes(errorAlertText);
         elError.id = 'errorJavascriptNum' + nbErrorJavascript;
-        elError.innerHTML = '<span class="icon icon-erreur"></span> Erreur Javascript détectée (n° de l\'erreur : ' + nbErrorJavascript + '). Pour plus d\'informations sur l\'erreur, <a href="#" onclick="openPopup(\'' + texteFormatted + '\');">cliquez ici</a> ou jetez un coup d\'œil à la console Javascript. &nbsp;&nbsp;<span class="icon icon-close" style="color: black; cursor: pointer; font-size: 10pt;" title="Fermer" onclick="$(\'#errorJavascriptNum' + nbErrorJavascript + '\').fadeOut(250,function(){$(\'#errorJavascriptNum' + nbErrorJavascript + '\').html(\'\')});"></span>';
+        elError.innerHTML = '<span class="icon icon-erreur"></span> ' + i18next.t("debugMode.title") + ' ' + nbErrorJavascript + '). ' + i18next.t("debugMode.moreInfo") + ' <a href="#" onclick="openPopup(\'' + texteFormatted + '\');">' + i18next.t("debugMode.clickHere") + '</a> ' + i18next.t("debugMode.console") + ' &nbsp;&nbsp;<span class="icon icon-close" style="color: black; cursor: pointer; font-size: 10pt;" title="' + i18next.t("debugMode.close") + '" onclick="$(\'#errorJavascriptNum' + nbErrorJavascript + '\').fadeOut(250,function(){$(\'#errorJavascriptNum' + nbErrorJavascript + '\').html(\'\')});"></span>';
         document.getElementById("javascriptErrorsList").appendChild(elError);
         $("#javascriptErrors").fadeIn(250);
     }
